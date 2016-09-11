@@ -159,6 +159,7 @@ foreach($tick as $k=>$l)
 				$chengjiao[$z2]['p'] = $v['p'];
 				$chengjiao[$z2]['nt'] = $chicang;
 				$chengjiao[$z2]['d1'] = $v['d1'];
+				$chengjiao[$z2]['profit'] = calprofit($chengjiao,$v['p']);
 				
 				$z2++;
 				$up["".($v['p']).""][$v['d']] = 1;
@@ -202,6 +203,7 @@ foreach($tick as $k=>$l)
 				$chengjiao[$z2]['p'] = $v['p'];
 				$chengjiao[$z2]['nt'] = $chicang;
 				$chengjiao[$z2]['d1'] = $v['d1'];
+				$chengjiao[$z2]['profit'] = calprofit($chengjiao,$v['p']);
 				$z2++;
 				$up["".($v['p']-$w*$minmove).""][$v['d']] = 1;	
 				$up["".($v['p']-$w*$minmove).""] = checkinit($up["".($v['p']-$w*$minmove).""],&$data5);
@@ -440,7 +442,6 @@ foreach($tick as $k=>$l)
 				$weituo[$z1]['t'] = $l['date'];
 				$z1++;
 			}
-			/**/
 		}
 		
 	}	
@@ -477,6 +478,22 @@ function checkweituo(array $ar,$p,$d,$minmove,$w,$debug=0)
 			return false;
 	}
 	return true;
+}
+function calprofit(array $ar,$p)
+{
+	$profit = 0;
+	foreach($ar as $k=>$v)
+	{
+		if($v['d']=="b")
+		{
+			$profit = $profit + $p-$v['p'];
+		}
+		else if($v['d']=="s")
+		{
+			$profit = $profit + ($v['p']-$p);
+		}
+	}
+	return $profit;
 }
 function microtime_float()
 {
@@ -595,7 +612,7 @@ foreach($data3 as $k=>$v)
 	$objCommentRichText = $objPHPExcel->getActiveSheet()->getComment($k.$data2[$chengjiao[$v-2]['p'].$chengjiao[$v-2]['d']])->getText()->createTextRun(iconv("gb2312","utf-8",'类型'));
 	$objCommentRichText->getFont()->setBold(true);
 	$objPHPExcel->getActiveSheet()->getComment($k.$data2[$chengjiao[$v-2]['p'].$chengjiao[$v-2]['d']])->getText()->createTextRun("\r\n");
-	$objPHPExcel->getActiveSheet()->getComment($k.$data2[$chengjiao[$v-2]['p'].$chengjiao[$v-2]['d']])->getText()->createTextRun($chengjiao[$v-2]['d1']);
+	$objPHPExcel->getActiveSheet()->getComment($k.$data2[$chengjiao[$v-2]['p'].$chengjiao[$v-2]['d']])->getText()->createTextRun($chengjiao[$v-2]['d1'].",".$chengjiao[$v-2]['profit']);
 	$objPHPExcel->getActiveSheet()->getComment($k.$data2[$chengjiao[$v-2]['p'].$chengjiao[$v-2]['d']])->setHeight("150");
 
 	if($chengjiao[$v-2]['d']=="b")
@@ -673,9 +690,9 @@ $sheetcount++;
 
 $objPHPExcel->getActiveSheet()->setTitle(iconv("gb2312","utf-8",'总结'));
 $objPHPExcel->getActiveSheet()->setCellValue('A1',iconv("gb2312","utf-8",'序号'));
-$objPHPExcel->getActiveSheet()->setCellValue('B1',iconv("gb2312","utf-8",'开仓时间'));
+$objPHPExcel->getActiveSheet()->setCellValue('B1',iconv("gb2312","utf-8",'委托时间'));
 $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
-$objPHPExcel->getActiveSheet()->setCellValue('C1', iconv("gb2312","utf-8",'平仓时间'));
+$objPHPExcel->getActiveSheet()->setCellValue('C1', iconv("gb2312","utf-8",'成交时间'));
 $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(25);
 $objPHPExcel->getActiveSheet()->setCellValue('D1', iconv("gb2312","utf-8",'方向'));
 $objPHPExcel->getActiveSheet()->setCellValue('E1', iconv("gb2312","utf-8",'价格'));
