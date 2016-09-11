@@ -238,7 +238,6 @@ foreach($tick as $k=>$l)
 			//var_dump($up["".($l['askprice1']]['s']);
 			print substr($chengjiao[$z2-1]['d'],0,1)."\n";
 			print $up[$v1['p']-$minmove*$w]['b']."\n";
-			//var_dump($weituo);
 			print "¾»³Ö²Ö:".$chicang."\n";
 			print $l['bidprice1']."\n";
 			print $isH."\n";
