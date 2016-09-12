@@ -728,7 +728,7 @@ foreach($chengjiao as $k=>$v)
 	else
 		$profit3 = $profit3-$v['p']*$fee*$unit;
 	$objPHPExcel->getActiveSheet()->setCellValue('H'.$n,$profit3);
-	$objPHPExcel->getActiveSheet()->setCellValue('I'.$n,$profit);
+	$objPHPExcel->getActiveSheet()->setCellValue('I'.$n,$v['profit']);
 	$n++;
 	$z++;
 }
@@ -861,7 +861,7 @@ foreach($weituo as $k=>$v)
 }
 //$objPHPExcel->getActiveSheet()->setCellValue('H'.$n,"=SUM(H2:H".($n-1).")");
 //$objPHPExcel->getActiveSheet()->setCellValue('I'.$n,"=SUM(I2:I".($n-1).")");
-$objPHPExcel->setActiveSheetIndex(0);
+$objPHPExcel->setActiveSheetIndex(1);
 if(isset($argv) && $argv[6]==1)
 {
 	$time_end = microtime_float();
@@ -872,7 +872,7 @@ $time_start = microtime_float();
 $filename = iconv("gb2312","utf-8","³É½»Ã÷Ï¸");
 
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment;filename="'.$_REQUEST['contracts'].'('.$_REQUEST['startdate'].'-'.$_REQUEST['enddate'].')-'.$blance.'-'.$w.'.xlsx"');
+header('Content-Disposition: attachment;filename="'.$_REQUEST['contracts'].'('.$_REQUEST['startdate'].'-'.$_REQUEST['enddate'].')-'.$blance.'-'.$w.'('.time().').xlsx"');
 header('Cache-Control: max-age=0');
 // If you're serving to IE 9, then the following may be needed
 header('Cache-Control: max-age=1');
