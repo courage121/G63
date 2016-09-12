@@ -43,7 +43,7 @@ $n = 800;
 //格宽
 if(empty($_REQUEST))
 {
-	$_REQUEST['contracts'] = $argv[1];
+	$_REQUEST['contracts'] = strtolower($argv[1]);
 	$_REQUEST['startdate'] = $argv[2];
 	if($argv[3]==0)
 		$_REQUEST['enddate'] = "2016-12-31";
@@ -122,7 +122,7 @@ while($l = mysql_fetch_array($r))
 	}
 }
 mysql_free_result($r);
-if($argv[6]==1)
+if(isset($argv) && $argv[6]==1)
 {
 $time_end = microtime_float();
 $time = ($time_end - $time_start);
@@ -445,7 +445,7 @@ foreach($tick as $k=>$l)
 		
 	}	
 }
-if($argv[6]==1)
+if(isset($argv) && $argv[6]==1)
 	{
 		$time_end = microtime_float();
 		$time = $time_end - $time_start;
@@ -529,7 +529,10 @@ $data4 = array();
 $n = 1;
 $data2 = array();
 $objPHPExcel->getActiveSheet()->setCellValue('B1', $w);
+if(isset($argv) && $argv[6]==1)
+{
 print "需要循环:".(max($data1)+$minmove*$w-(min($data1)-$minmove*$w)).",".key($lastrow)."\n";
+}
 for($i = max($data1)+$minmove*$w;$i>=min($data1)-$minmove*$w;)
 {
 	//print "循环:".$i."\n";
@@ -546,7 +549,7 @@ for($i = max($data1)+$minmove*$w;$i>=min($data1)-$minmove*$w;)
 	//$time_start1 = microtime_float();
 	$objPHPExcel->getActiveSheet()->getStyle('A'.$n)->getFont()->getColor()->setARGB(PHPExcel_Style_Color::COLOR_RED);
 	$objPHPExcel->getActiveSheet()->getRowDimension( $n )->setRowHeight(12);
-	if($argv[6]==1)
+	if(isset($argv) && $argv[6]==1)
 	{
 		//$time_end1 = microtime_float();
 		//$time1 = $time_end1 - $time_start1;
@@ -576,7 +579,7 @@ for($i = max($data1)+$minmove*$w;$i>=min($data1)-$minmove*$w;)
 	*/
 }
 unset($data1);
-if($argv[6]==1)
+if(isset($argv) && $argv[6]==1)
 {
 	$time_end = microtime_float();
 	$time = $time_end - $time_start;
@@ -641,7 +644,7 @@ foreach($data3 as $k=>$v)
 	}
 }
 unset($data2);
-if($argv[6]==1)
+if(isset($argv) && $argv[6]==1)
 {
 	$time_end = microtime_float();
 	$time = $time_end - $time_start;
@@ -676,7 +679,7 @@ foreach($data4 as $k=>$v)
 	}
 }
 unset($data4);
-if($argv[6]==1)
+if(isset($argv) && $argv[6]==1)
 {
 	$time_end = microtime_float();
 	$time = $time_end - $time_start;
@@ -761,7 +764,7 @@ foreach ($objPHPExcel->getActiveSheet()->getRowIterator() as $row) {
 		
     }
 }
-if($argv[6]==1)
+if(isset($argv) && $argv[6]==1)
 {
 	$time_end = microtime_float();
 	$time = $time_end - $time_start;
@@ -834,7 +837,7 @@ $chart->setBottomRightPosition('Z120');
 
 //	Add the chart to the worksheet
 $objWorksheet->addChart($chart);
-if($argv[6]==1)
+if(isset($argv) && $argv[6]==1)
 {
 	$time_end = microtime_float();
 	$time = $time_end - $time_start;
@@ -859,7 +862,7 @@ foreach($weituo as $k=>$v)
 //$objPHPExcel->getActiveSheet()->setCellValue('H'.$n,"=SUM(H2:H".($n-1).")");
 //$objPHPExcel->getActiveSheet()->setCellValue('I'.$n,"=SUM(I2:I".($n-1).")");
 $objPHPExcel->setActiveSheetIndex(0);
-if($argv[6]==1)
+if(isset($argv) && $argv[6]==1)
 {
 	$time_end = microtime_float();
 	$time = $time_end - $time_start;
@@ -867,13 +870,13 @@ if($argv[6]==1)
 }
 $time_start = microtime_float();
 $filename = iconv("gb2312","utf-8","成交明细");
-/*
+
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 header('Content-Disposition: attachment;filename="'.$_REQUEST['contracts'].'('.$_REQUEST['startdate'].'-'.$_REQUEST['enddate'].')-'.$blance.'-'.$w.'.xlsx"');
 header('Cache-Control: max-age=0');
 // If you're serving to IE 9, then the following may be needed
 header('Cache-Control: max-age=1');
-
+/*
 // If you're serving to IE over SSL, then the following may be needed
 header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
 header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
@@ -882,10 +885,11 @@ header ('Pragma: public'); // HTTP/1.0
 */
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 $objWriter->setIncludeCharts(true);
-//$objWriter->save('php://output');
-$objWriter->save($_REQUEST['contracts'].'('.$_REQUEST['startdate'].'-'.$_REQUEST['enddate'].')-'.$blance.'-'.$w.'('.time().').xlsx');
-if($argv[6]==1)
+if(!isset($argv))
+	$objWriter->save('php://output');
+if(isset($argv) && $argv[6]==1)
 {
+	$objWriter->save($_REQUEST['contracts'].'('.$_REQUEST['startdate'].'-'.$_REQUEST['enddate'].')-'.$blance.'-'.$w.'('.time().').xlsx');
 	$time_end = microtime_float();
 	$time = $time_end - $time_start;
 	print "生成EXCEL-7耗时:".$time."\n";
