@@ -106,7 +106,7 @@ $z2 = 0;
 $prebidprice = 0;
 $tick = array();
 $time_start = microtime_float();
-$q = 'select date,askprice1,bidprice1 from '.$_REQUEST['contracts'].' where date>="'.$_REQUEST['startdate'].'" and date<="'.$_REQUEST['enddate'].'"';//and date<"2016/08/25 11:05:54.492"
+$q = 'select date,askprice1,bidprice1 from '.$_REQUEST['contracts'].' where askprice1!=0 and bidprice1!=0 and date>="'.$_REQUEST['startdate'].'" and date<="'.$_REQUEST['enddate'].'"';//and date<"2016/08/25 11:05:54.492"
 $r = mysql_query($q);
 $z4 = 0;
 
