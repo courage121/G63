@@ -279,7 +279,7 @@ foreach($tick as $k=>$l)
 			//新高或者新低还没有新高的过程中
 			//交易的区间没有多单
 			//$chicang <= $maxloss => $chicang <= 0
-			else if($chicang <= $maxloss && $chicang>=-2*$maxloss && !empty($chengjiao) == true && substr($chengjiao[$z2-1]['d'],0,1) == "s" 	&& isset($up["".($l['bidprice1']).""]) && checkweituo($weituo,$l['bidprice1'],"b",$minmove,$w) && $up["".($l['bidprice1']).""]['b']==0 && ($l['bidprice1']>$highestB || $l['bidprice1']<$highestS) && ($isH == 0 || $l['bidprice1']>$highestB ))
+			else if(!empty($chengjiao) == true && substr($chengjiao[$z2-1]['d'],0,1) == "s" && isset($up["".($l['bidprice1']).""]) && checkweituo($weituo,$l['bidprice1'],"b",$minmove,$w) && $up["".($l['bidprice1']).""]['b']==0)
 			{
 				foreach($weituo as $k1 => $v1)
 				{
@@ -299,7 +299,7 @@ foreach($tick as $k=>$l)
 			//净持仓为负
 			//前一个成交为买
 			//交易区间有空单,没有多单
-			else if($chicang<=-$maxloss && !empty($chengjiao) == true  	&& isset($up["".($l['bidprice1']).""]) && checkweituo($weituo,$l['bidprice1'],"b",$minmove,$w) && (($up["".($l['bidprice1']).""]['b']==0 && $up["".($l['bidprice1']).""]['s']==0 && $isH==0 && substr($chengjiao[$z2-1]['d'],0,1) == "b") || ($up["".($l['bidprice1']).""]['b']==0 && $up["".($l['bidprice1']).""]['s']==1)))
+			else if(!empty($chengjiao) == true 	&& isset($up["".($l['bidprice1']).""]) && checkweituo($weituo,$l['bidprice1'],"b",$minmove,$w) && (($up["".($l['bidprice1']).""]['b']==0 && $up["".($l['bidprice1']).""]['s']==0 && $isH==0 && substr($chengjiao[$z2-1]['d'],0,1) == "b") || ($up["".($l['bidprice1']).""]['b']==0 && $up["".($l['bidprice1']).""]['s']==1)))
 			{
 				foreach($weituo as $k1 => $v1)
 				{
