@@ -175,7 +175,7 @@ foreach($tick as $k=>$l)
 						unset($weituo[$k1]);
 					}
 				}
-				if(!($chicang==2*$maxloss && $isL==1 && $up["".($v['p']).""]['b']==0))
+				//if(!($chicang==2*$maxloss && $isL==1 && $up["".($v['p']).""]['b']==0))
 				{
 					debugout($z1."	".($v['p']+$w*$minmove)."	s	".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]:".($v['p']+$w*$minmove)." A1,".$z1."	\n",$isdebug);
 					$wt['p'] = $weituo[$z1]['p'] = $v['p']+$w*$minmove;
@@ -219,7 +219,7 @@ foreach($tick as $k=>$l)
 					}
 				}
 				//if(!($chicang==-$minmove*$w && $isH==1 && $up["".($v['p']-$w*$minmove]['s']==0 && $up["".($v['p']-$w*$minmove]['b']==0))
-				if(!($chicang==-2*$maxloss && $isH==1))
+				//if(!($chicang==-2*$maxloss && $isH==1))
 				{
 					debugout($z1."	".($v['p']-$w*$minmove)."	b	".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]:".($v['p']-$w*$minmove)." B1,".$z1."	\n",$isdebug);
 					$wt['p'] = $weituo[$z1]['p'] = $v['p']-$w*$minmove;
@@ -231,30 +231,7 @@ foreach($tick as $k=>$l)
 			}				
 		}
 		//print "检查委托结束\n";
-		//if($up["".($l['bidprice1']]['b']==0 && $up["".($l['bidprice1']]['s']==0)
-		if($l['date']=="2016-08-15 11:26:31" && $isdebug)
-		{
-			//var_dump($up["".($l['askprice1']-$minmove*$w]);
-			//var_dump($up["".($l['askprice1']]['s']);
-			print substr($chengjiao[$z2-1]['d'],0,1)."\n";
-			print $up[$v1['p']-$minmove*$w]['b']."\n";
-			print "净持仓:".$chicang."\n";
-			print $l['bidprice1']."\n";
-			print $isH."\n";
-			print $isL."\n";
-			//print max($chengjiao[$z2-1]['p'],$l['bidprice1']+$minmove*$w)."\n";
-			var_dump($up["".($l['bidprice1']).""]);
-			$chicang <= $maxloss && $chicang>=-2*$maxloss && !empty($chengjiao) == true && substr($chengjiao[$z2-1]['d'],0,1) == "s" 	&& isset($up["".($l['bidprice1']).""]) && checkweituo($weituo,$l['bidprice1'],"b",$minmove,$w) && $up["".($l['bidprice1']).""]['b']==0 && ($l['bidprice1']>$highestB || $l['bidprice1']<$highestS) && ($isH == 0 || $l['bidprice1']>$highestB )?print "1\n":print "-1\n";
-			
-			$chicang <= $maxloss && $chicang>=-2*$maxloss?print "1\n":print "-1\n";
-			substr($chengjiao[$z2-1]['d'],0,1) == "s"?print "1\n":print "-1\n";
-			checkweituo($weituo,$l['bidprice1'],"b",$minmove,$w)?print "1\n":print "-1\n";
-			$up["".($l['bidprice1']).""]['b']==0?print "1\n":print "-1\n";
-			$up["".($l['askprice1']-$minmove*$w).""]['s']==0?print "1\n":print "-1\n";
-			($l['bidprice1']>$highestB || $l['bidprice1']<$highestS)?print "1\n":print "-1\n";
-			($isH == 0 || $l['bidprice1']>$highestB )?print "1\n":print "-1\n";
-		}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		{
 
 			if(empty($chengjiao) && isset($up["".($l['bidprice1']).""]) )
@@ -274,11 +251,6 @@ foreach($tick as $k=>$l)
 				$weituo[$z1]['t'] = $l['date'];
 				$z1++;
 			}
-			//持仓[-2,1],净持仓为负或没有达到最大正持仓2
-			//前一个成交为卖
-			//新高或者新低还没有新高的过程中
-			//交易的区间没有多单
-			//$chicang <= $maxloss => $chicang <= 0
 			else if(!empty($chengjiao) == true && substr($chengjiao[$z2-1]['d'],0,1) == "s" && isset($up["".($l['bidprice1']).""]) && checkweituo($weituo,$l['bidprice1'],"b",$minmove,$w) && $up["".($l['bidprice1']).""]['b']==0)
 			{
 				foreach($weituo as $k1 => $v1)
@@ -296,42 +268,11 @@ foreach($tick as $k=>$l)
 				$weituo[$z1]['t'] = $l['date'];
 				$z1++;
 			}
-			//净持仓为负
-			//前一个成交为买
-			//交易区间有空单,没有多单
-			else if(!empty($chengjiao) == true 	&& isset($up["".($l['bidprice1']).""]) && checkweituo($weituo,$l['bidprice1'],"b",$minmove,$w) && (($up["".($l['bidprice1']).""]['b']==0 && $up["".($l['bidprice1']).""]['s']==0 && $isH==0 && substr($chengjiao[$z2-1]['d'],0,1) == "b") || ($up["".($l['bidprice1']).""]['b']==0 && $up["".($l['bidprice1']).""]['s']==1)))
+			else if(!empty($chengjiao) == true && substr($chengjiao[$z2-1]['d'],0,1) == "b" && isset($up["".($l['askprice1']).""]) && checkweituo($weituo,$l['askprice1'],"s",$minmove,$w) && $up["".($l['askprice1']).""]['s']==0)
 			{
 				foreach($weituo as $k1 => $v1)
 				{
-					if($v1['d'] != "0" && $v1['p']<=$l['bidprice1'] && substr($v1['d'],0,1) == "b")
-					{
-						$weituo[$k1]['d'] = "0";
-						unset($weituo[$k1]);
-					}
-				}
-				debugout($z1."	".$l['bidprice1']."	b ".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]:".$l['bidprice1']." D1,".$z1."	\n",$isdebug);
-				$wt['p'] = $weituo[$z1]['p'] = $l['bidprice1'];
-				$wt['d'] = $weituo[$z1]['d'] = "b";
-				$weituo[$z1]['d1'] = "b-2";
-				$weituo[$z1]['t'] = $l['date'];
-				$z1++;
-			}
-			
-			//$chicang >= -$maxloss => $chicang >= 0
-			else if($chicang >= -$maxloss && $chicang<=2*$maxloss && !empty($chengjiao) == true && substr($chengjiao[$z2-1]['d'],0,1) == "b" && isset($up["".($l['askprice1']-$minmove*$w).""]) && checkweituo($weituo,$l['askprice1'],"s",$minmove,$w) && $up["".($l['askprice1']-$minmove*$w).""]['s']==0 && ($l['askprice1']<$lowestS || $l['askprice1']>$lowestB) && ($isL == 0 || $l['askprice1']<$lowestS))
-			{
-				foreach($weituo as $k1 => $v1)
-				{
-					if( $v1['p']=="417.5" && $l['date']=="2016-08-15 09:00:12" && $isdebug)
-					{
-						print "净持仓:".$chicang."\n";
-						print "区间买持仓:".$up[$v1['p']-$minmove*$w]['b']."\n";
-						$v1['d'] != "0"?print "1\n":print "-1\n";
-						$v1['p']>=$l['askprice1']?print "1\n":print "-1\n";
-						substr($v1['d'],0,1) == "s"?print "方向:1\n":print "方向:-1\n";
-						($up[$v1['p']-$minmove*$w]['b']!=0 || $chicang==-$maxloss)?print "1\n":print "-1\n";
-					}
-					if($v1['d'] != "0" && $v1['p']>=$l['askprice1'] && substr($v1['d'],0,1) == "s")// && ($up[$v1['p']-$minmove*$w]['b']==0 || $chicang==-$maxloss))
+					if($v1['d'] != "0" && $v1['p']>=$l['askprice1'] && substr($v1['d'],0,1) == "s")
 					{
 						$weituo[$k1]['d'] = "0";
 						unset($weituo[$k1]);
@@ -345,102 +286,6 @@ foreach($tick as $k=>$l)
 				$z1++;
 			}
 			
-			else if($chicang>=$maxloss && !empty($chengjiao) == true 	&& isset($up["".($l['bidprice1']).""]) && checkweituo($weituo,$l['bidprice1']+$minmove*$w,"s",$minmove,$w) && (($up["".($l['bidprice1']).""]['b']==0 && $up["".($l['bidprice1']).""]['s']==0 && $isL==0  && substr($chengjiao[$z2-1]['d'],0,1) == "s") || ($up["".($l['bidprice1']).""]['b']==1 && $up["".($l['bidprice1']).""]['s']==0)))
-			{
-				foreach($weituo as $k1 => $v1)
-				{
-					if($v1['d'] != "0" && $v1['p']>=$l['bidprice1']+$minmove*$w && substr($v1['d'],0,1) == "s")
-					{
-						$weituo[$k1]['d'] = "0";
-						unset($weituo[$k1]);
-					}
-				}
-				debugout($z1."	".($l['askprice1'])."	s ".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]: G1,".$z1."	\n",$isdebug);
-				$wt['p'] = $weituo[$z1]['p'] = $l['bidprice1']+$minmove*$w;
-				$wt['d'] = $weituo[$z1]['d'] = "s";
-				$weituo[$z1]['d1'] = "s-2";
-				$weituo[$z1]['t'] = $l['date'];
-				$z1++;
-			}/**/
-			/**/
-			else if($chicang == 0)
-			{
-				if(isset($up["".($l['askprice1']-$minmove*$w).""]) && $up["".($l['askprice1']-$minmove*$w).""]['b']==1 && $up["".($l['askprice1']-$minmove*$w).""]['s']==0 &&  checkweituo($weituo,$l['askprice1'],"s",$minmove,$w))
-				{
-					foreach($weituo as $k1 => $v1)
-					{
-						if($v1['d'] != "0" && $v1['p']>=$l['askprice1']-$minmove*$w && substr($v1['d'],0,1) == "s")
-						{
-							$weituo[$k1]['d'] = "0";
-							unset($weituo[$k1]);
-						}
-					}
-					debugout($z1."	".($l['bidprice1']+$minmove*$w)."	s ".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]:".($l['bidprice1']+$minmove*$w)." E1,".$z1."	\n",$isdebug);
-					$wt['p'] = $weituo[$z1]['p'] = $l['askprice1'];
-					$wt['d'] = $weituo[$z1]['d'] = "s";
-					$wt['n'] = $weituo[$z1]['n'] = 1;
-					$weituo[$z1]['d1'] = "s-3";
-					$weituo[$z1]['t'] = $l['date'];
-					$z1++;
-				}
-				
-				else if(isset($up["".($l['bidprice1']).""]) && $up["".($l['bidprice1']).""]['b']==0 && $up["".($l['bidprice1']).""]['s']==1 && checkweituo($weituo,$l['bidprice1'],"b",$minmove,$w))
-				{
-					foreach($weituo as $k1 => $v1)
-					{
-						if($v1['d'] != "0" && $v1['p']<=$l['bidprice1'] && substr($v1['d'],0,1) == "b")
-						{
-							$weituo[$k1]['d'] = "0";
-							unset($weituo[$k1]);
-						}
-					}
-					debugout($z1."	".$l['bidprice1']."	b ".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]:".$l['bidprice1']." D1,".$z1."	\n",$isdebug);
-					$wt['p'] = $weituo[$z1]['p'] = $l['bidprice1'];
-					$wt['d'] = $weituo[$z1]['d'] = "b";
-					$wt['n'] = $weituo[$z1]['n'] = 1;
-					$weituo[$z1]['d1'] = "b-3";
-					$weituo[$z1]['t'] = $l['date'];
-					$z1++;
-				}
-				/**/
-			}
-			//不只是新高才补区间
-			else if($chicang == -$maxloss && substr($chengjiao[$z2-1]['d'],0,1) == "s" && isset($up["".($l['bidprice1']).""]) && $up["".($l['bidprice1']).""]['b']==1 && $up["".($l['bidprice1']).""]['s']==0 && checkweituo($weituo,$l['bidprice1']+$minmove*$w,"s",$minmove,$w) && ($l['bidprice1']+$minmove*$w != $wt['p']|| $wt['d'] != "s"))// && $l['bidprice1']>=$highestB
-			{
-				foreach($weituo as $k1 => $v1)
-				{
-					if($v1['d'] != "0" && $v1['p']>=$l['bidprice1']+$minmove*$w && substr($v1['d'],0,1) == "s")
-					{
-						$weituo[$k1]['d'] = "0";
-						unset($weituo[$k1]);
-					}
-				}
-				debugout($z1."	".($l['bidprice1']+$minmove*$w)."	s ".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]:".($l['bidprice1']+$minmove*$w)." E1,".$z1."	\n",$isdebug);
-				$wt['p'] = $weituo[$z1]['p'] = $l['bidprice1']+$minmove*$w;
-				$wt['d'] = $weituo[$z1]['d'] = "s";
-				$weituo[$z1]['d1'] = "s-4";
-				$weituo[$z1]['t'] = $l['date'];
-				$z1++;
-			}
-			//不只是新低才补区间
-			else if($chicang == $maxloss && substr($chengjiao[$z2-1]['d'],0,1) == "b" && isset($up["".($l['bidprice1']).""]) && $up["".($l['bidprice1']).""]['s']==1 && $up["".($l['bidprice1']).""]['b']==0  && checkweituo($weituo,$l['bidprice1'],"b",$minmove,$w) && ($l['bidprice1'] != $wt['p']|| $wt['d'] != "b"))//&& $l['bidprice1']+$minmove*$w<=$lowestS
-			{
-				foreach($weituo as $k1 => $v1)
-				{
-					if($v1['d'] != "0" && $v1['p']<=$l['bidprice1'] && substr($v1['d'],0,1) == "b")
-					{
-						$weituo[$k1]['d'] = "0";
-						unset($weituo[$k1]);
-					}
-				}
-				debugout($z1."	".$l['bidprice1']."	b ".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]:".$l['bidprice1']." D1,".$z1."	\n",$isdebug);
-				$wt['p'] = $weituo[$z1]['p'] = $l['bidprice1'];
-				$wt['d'] = $weituo[$z1]['d'] = "b";
-				$wt['n'] = $weituo[$z1]['n'] = 1;
-				$weituo[$z1]['d1'] = "b-4";
-				$weituo[$z1]['t'] = $l['date'];
-				$z1++;
-			}
 		}
 		
 	}	
