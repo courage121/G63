@@ -232,6 +232,14 @@ foreach($tick as $k=>$l)
 		}
 		//print "检查委托结束\n";
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+if(isset($argv) && $argv[6]==1)
+{
+	if($l['date'] == "2016-07-01 09:00:02")
+	{
+		print "[".$l['bidprice1'].",".$l['askprice1']."]\n";
+		var_dump($up["".($l['bidprice1']).""]);
+	}
+}
 		{
 
 			if(empty($chengjiao) && isset($up["".($l['bidprice1']).""]) )
@@ -268,7 +276,7 @@ foreach($tick as $k=>$l)
 				$weituo[$z1]['t'] = $l['date'];
 				$z1++;
 			}
-			else if(!empty($chengjiao) == true && substr($chengjiao[$z2-1]['d'],0,1) == "b" && isset($up["".($l['askprice1']).""]) && checkweituo($weituo,$l['askprice1'],"s",$minmove,$w) && $up["".($l['askprice1']).""]['s']==0)
+			else if(!empty($chengjiao) == true && substr($chengjiao[$z2-1]['d'],0,1) == "b" && isset($up["".($l['bidprice1']).""]) && checkweituo($weituo,$l['bidprice1']+$minmove*$w,"s",$minmove,$w) && $up["".($l['bidprice1']).""]['s']==0)
 			{
 				foreach($weituo as $k1 => $v1)
 				{
@@ -278,10 +286,44 @@ foreach($tick as $k=>$l)
 						unset($weituo[$k1]);
 					}
 				}
-				debugout($z1."	".($l['askprice1'])."	s ".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]: G1,".$z1."	\n",$isdebug);
-				$wt['p'] = $weituo[$z1]['p'] = $l['askprice1'];
+				debugout($z1."	".($l['bidprice1']+$minmove*$w)."	s ".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]: G1,".$z1."	\n",$isdebug);
+				$wt['p'] = $weituo[$z1]['p'] = $l['bidprice1']+$minmove*$w;
 				$wt['d'] = $weituo[$z1]['d'] = "s";
 				$weituo[$z1]['d1'] = "s-1";
+				$weituo[$z1]['t'] = $l['date'];
+				$z1++;
+			}
+			else if(!empty($chengjiao) == true && $chicang<=0 && isset($up["".($l['bidprice1']).""]) && checkweituo($weituo,$l['bidprice1'],"b",$minmove,$w) && $up["".($l['bidprice1']).""]['b']==0)
+			{
+				foreach($weituo as $k1 => $v1)
+				{
+					if($v1['d'] != "0" && $v1['p']<=$l['bidprice1'] && substr($v1['d'],0,1) == "b")
+					{
+						$weituo[$k1]['d'] = "0";
+						unset($weituo[$k1]);
+					}
+				}
+				debugout($z1."	".$l['bidprice1']."	b ".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]:".$l['bidprice1']." D1,".$z1."	\n",$isdebug);
+				$wt['p'] = $weituo[$z1]['p'] = $l['bidprice1'];
+				$wt['d'] = $weituo[$z1]['d'] = "b";
+				$weituo[$z1]['d1'] = "b-2";
+				$weituo[$z1]['t'] = $l['date'];
+				$z1++;
+			}
+			else if(!empty($chengjiao) == true && $chicang>=0 && isset($up["".($l['bidprice1']).""]) && checkweituo($weituo,$l['bidprice1']+$minmove*$w,"s",$minmove,$w) && $up["".($l['bidprice1']).""]['s']==0)
+			{
+				foreach($weituo as $k1 => $v1)
+				{
+					if($v1['d'] != "0" && $v1['p']>=$l['askprice1'] && substr($v1['d'],0,1) == "s")
+					{
+						$weituo[$k1]['d'] = "0";
+						unset($weituo[$k1]);
+					}
+				}
+				debugout($z1."	".($l['bidprice1']+$minmove*$w)."	s ".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]: G1,".$z1."	\n",$isdebug);
+				$wt['p'] = $weituo[$z1]['p'] = $l['bidprice1']+$minmove*$w;
+				$wt['d'] = $weituo[$z1]['d'] = "s";
+				$weituo[$z1]['d1'] = "s-2";
 				$weituo[$z1]['t'] = $l['date'];
 				$z1++;
 			}
@@ -715,12 +757,14 @@ if(isset($argv) && $argv[6]==1)
 }
 $time_start = microtime_float();
 $filename = iconv("gb2312","utf-8","成交明细");
-
+if(!isset($argv))
+{
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 header('Content-Disposition: attachment;filename="'.$_REQUEST['contracts'].'('.$_REQUEST['startdate'].'-'.$_REQUEST['enddate'].')-'.$blance.'-'.$w.'.xlsx"');
 header('Cache-Control: max-age=0');
 // If you're serving to IE 9, then the following may be needed
 header('Cache-Control: max-age=1');
+}
 /*
 // If you're serving to IE over SSL, then the following may be needed
 header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
