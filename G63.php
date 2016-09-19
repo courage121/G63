@@ -163,7 +163,7 @@ foreach($tick as $k=>$l)
 				
 				$z2++;
 				$up["".($v['p']).""][$v['d']] = 1;
-				$up["".($v['p']).""] = checkinit($up["".($v['p']).""],&$data5);
+				checkinit(&$up,$v['p'],1);
 				debugout($z1."		".($v['p'])."deal1 ".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]:".($v['p'])."deal1,".$v['d']."\n",$isdebug);
 				unset($weituo[$k]);
 				
@@ -206,7 +206,23 @@ foreach($tick as $k=>$l)
 				$chengjiao[$z2]['profit'] = calprofit($chengjiao,$v['p']);
 				$z2++;
 				$up["".($v['p']-$w*$minmove).""][$v['d']] = 1;	
-				$up["".($v['p']-$w*$minmove).""] = checkinit($up["".($v['p']-$w*$minmove).""],&$data5);
+				if(isset($argv) && $argv[6]==1)
+				{
+					if($l['date'] == "2016-07-01 09:04:39")
+					{
+						print "[".$l['bidprice1'].",".$l['askprice1']."]\n";
+						var_dump($up["".($v['p']-$w*$minmove).""]);
+					}
+				}
+				checkinit(&$up,($v['p']-$w*$minmove),-1);
+				if(isset($argv) && $argv[6]==1)
+				{
+					if($l['date'] == "2016-07-01 09:04:39")
+					{
+						print "[".$l['bidprice1'].",".$l['askprice1']."]\n";
+						var_dump($up["".($v['p']-$w*$minmove).""]);
+					}
+				}
 				debugout($z1."		".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]:".($v['p'])."deal2,".$v['d']."\n",$isdebug);
 				unset($weituo[$k]);
 				
@@ -234,10 +250,10 @@ foreach($tick as $k=>$l)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 if(isset($argv) && $argv[6]==1)
 {
-	if($l['date'] == "2016-07-01 09:00:02")
+	if($l['date'] == "2016-07-01 09:05:18")
 	{
-		print "[".$l['bidprice1'].",".$l['askprice1']."]\n";
-		var_dump($up["".($l['bidprice1']).""]);
+	//	print "[".$l['bidprice1'].",".$l['askprice1']."]\n";
+	//	var_dump($up["".($l['bidprice1']).""]);
 	}
 }
 		{
@@ -259,6 +275,7 @@ if(isset($argv) && $argv[6]==1)
 				$weituo[$z1]['t'] = $l['date'];
 				$z1++;
 			}
+			
 			else if(!empty($chengjiao) == true && substr($chengjiao[$z2-1]['d'],0,1) == "s" && isset($up["".($l['bidprice1']).""]) && checkweituo($weituo,$l['bidprice1'],"b",$minmove,$w) && $up["".($l['bidprice1']).""]['b']==0)
 			{
 				foreach($weituo as $k1 => $v1)
@@ -293,6 +310,7 @@ if(isset($argv) && $argv[6]==1)
 				$weituo[$z1]['t'] = $l['date'];
 				$z1++;
 			}
+			/*
 			else if(!empty($chengjiao) == true && $chicang<=0 && isset($up["".($l['bidprice1']).""]) && checkweituo($weituo,$l['bidprice1'],"b",$minmove,$w) && $up["".($l['bidprice1']).""]['b']==0)
 			{
 				foreach($weituo as $k1 => $v1)
@@ -327,7 +345,7 @@ if(isset($argv) && $argv[6]==1)
 				$weituo[$z1]['t'] = $l['date'];
 				$z1++;
 			}
-			
+			*/
 		}
 		
 	}	
@@ -338,17 +356,39 @@ if(isset($argv) && $argv[6]==1)
 		$time = $time_end - $time_start;
 		print "计算耗时:".$time."\n";
 	}
-function checkinit(array $ar,array $data5)
-{
-	if($ar['b']*$ar['s']==0)
-			return $ar;
-	else
+function checkinit(array $up,$p,$d)
+{	
+	if($up["".$p.""]['b']*$up["".$p.""]['s']==1)
 	{
-		$ar['b'] = 0;
-		$ar['s'] = 0;
+		$up["".$p.""]['b'] = 0;
+		$up["".$p.""]['s'] = 0;
+		
 	}
-	return $ar;
 	
+	else if($d==-1)
+	{
+		foreach($up as $k=>$v)
+		{
+			if($k<$p && $up["".$k.""]['b']==1)
+			{
+				$up["".$p.""]['s'] = 0;
+				$up["".$k.""]['b'] = 0;
+			}
+				
+		}
+	}
+	else if($d==1)
+	{
+		foreach($up as $k=>$v)
+		{
+			if($k>$p && $up["".$k.""]['s']==1)
+			{
+				$up["".$p.""]['b'] = 0;
+				$up["".$k.""]['s'] = 0;
+			}
+				
+		}
+	}
 }
 function debugout($str,$b)
 {
@@ -760,7 +800,7 @@ $filename = iconv("gb2312","utf-8","成交明细");
 if(!isset($argv))
 {
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment;filename="'.$_REQUEST['contracts'].'('.$_REQUEST['startdate'].'-'.$_REQUEST['enddate'].')-'.$blance.'-'.$w.'.xlsx"');
+header('Content-Disposition: attachment;filename="'.$_REQUEST['contracts'].'('.$_REQUEST['startdate'].'-'.$_REQUEST['enddate'].')-'.$blance.'-'.$w.'('.time().').xlsx"');
 header('Cache-Control: max-age=0');
 // If you're serving to IE 9, then the following may be needed
 header('Cache-Control: max-age=1');
