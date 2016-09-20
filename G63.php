@@ -330,7 +330,7 @@ if((isset($argv) && $argv[6]==1) ||  $isdebug==1)
 							$i=($l['askprice1']-$l['bidprice1'])/$minmove+1;
 						}
 					}
-					else if(!empty($chengjiao) == true && $chicang<=0 && isset($up["".($l['bidprice1']+$i*$minmove).""]) && checkweituo($weituo,$l['bidprice1']+$i*$minmove,"b",$minmove,$w) && $up["".($l['bidprice1']+$i*$minmove).""]['b']==0 && $up["".($l['bidprice1']+$i*$minmove+$minmove*$w).""]['s']==1)
+					else if(!empty($chengjiao) == true && $chicang<=1 && isset($up["".($l['bidprice1']+$i*$minmove).""]) && checkweituo($weituo,$l['bidprice1']+$i*$minmove,"b",$minmove,$w) && $up["".($l['bidprice1']+$i*$minmove).""]['b']==0 && $up["".($l['bidprice1']+$i*$minmove+$minmove*$w).""]['s']==1)
 					{
 						{				
 							foreach($weituo as $k1 => $v1)
@@ -349,7 +349,7 @@ if((isset($argv) && $argv[6]==1) ||  $isdebug==1)
 							$z1++;
 						}
 					}
-					else if(!empty($chengjiao) == true && $chicang>=0 && isset($up["".($l['askprice1']-$i*$minmove).""]) && checkweituo($weituo,$l['askprice1']-$i*$minmove,"s",$minmove,$w) && $up["".($l['askprice1']-$i*$minmove).""]['s']==0 && $up["".($l['askprice1']-$i*$minmove-$minmove*$w).""]['b']==1)
+					else if(!empty($chengjiao) == true && $chicang>=-1 && isset($up["".($l['askprice1']-$i*$minmove).""]) && checkweituo($weituo,$l['askprice1']-$i*$minmove,"s",$minmove,$w) && $up["".($l['askprice1']-$i*$minmove).""]['s']==0 && $up["".($l['askprice1']-$i*$minmove-$minmove*$w).""]['b']==1)
 					{
 						{
 							foreach($weituo as $k1 => $v1)
