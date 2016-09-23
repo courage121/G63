@@ -83,7 +83,10 @@ if(isset($_REQUEST['debug']) && $_REQUEST['debug']=="1")
 }
 else
 	$isdebug = false;
-$maxloss = 1;
+if(isset($_REQUEST['maxloss']))
+	$maxloss = $_REQUEST['maxloss'];
+else
+	$maxloss = 1;
 $highestB = 0;
 $highestS = 0;
 $lowestS = 9999999;
@@ -290,7 +293,46 @@ if((isset($argv) && $argv[6]==1) ||  $isdebug==1)
 			{
 				for($i=0;$i<($l['askprice1']-$l['bidprice1'])/$minmove;$i++)
 				{
-					if(!empty($chengjiao) == true && $chicang<=$maxloss-1 && substr($chengjiao[$z2-1]['d'],0,1) == "s" && isset($up["".($l['bidprice1']+$i*$minmove).""]) && checkweituo($weituo,$l['bidprice1']+$i*$minmove,"b",$minmove,$w) && $up["".($l['bidprice1']+$i*$minmove).""]['b']==0)
+					
+					if(!empty($chengjiao) == true && $chicang<=$maxloss-1 && isset($up["".($l['bidprice1']+$i*$minmove).""]) && checkweituo($weituo,$l['bidprice1']+$i*$minmove,"b",$minmove,$w) && $up["".($l['bidprice1']+$i*$minmove).""]['b']==0 && $up["".($l['bidprice1']+$i*$minmove+$minmove*$w).""]['s']==1)
+					{
+						{				
+							foreach($weituo as $k1 => $v1)
+							{
+								if($v1['d'] != "0" && $v1['p']!=$l['bidprice1']+$i*$minmove && substr($v1['d'],0,1) == "b")
+								{
+									$weituo[$k1]['d'] = "0";
+									unset($weituo[$k1]);
+								}
+							}
+							debugout($z1."	".($l['bidprice1']+$i*$minmove)."	b ".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]:".$l['bidprice1']." B-2,".$z1."	\n",$isdebug);
+							$wt['p'] = $weituo[$z1]['p'] = $l['bidprice1']+$i*$minmove;
+							$wt['d'] = $weituo[$z1]['d'] = "b";
+							$weituo[$z1]['d1'] = "b-2";
+							$weituo[$z1]['t'] = $l['date'];
+							$z1++;
+						}
+					}
+					else if(!empty($chengjiao) == true && $chicang>=-$maxloss+1 && isset($up["".($l['askprice1']-$i*$minmove).""]) && checkweituo($weituo,$l['askprice1']-$i*$minmove,"s",$minmove,$w) && $up["".($l['askprice1']-$i*$minmove).""]['s']==0 && $up["".($l['askprice1']-$i*$minmove-$minmove*$w).""]['b']==1)
+					{
+						{
+							foreach($weituo as $k1 => $v1)
+							{
+								if($v1['d'] != "0" && $v1['p']!=$l['askprice1']-$i*$minmove && substr($v1['d'],0,1) == "s")
+								{
+									$weituo[$k1]['d'] = "0";
+									unset($weituo[$k1]);
+								}
+							}
+							debugout($z1."	".($l['askprice1']-$i*$minmove)."	s ".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]: S-2,".$z1."	\n",$isdebug);
+							$wt['p'] = $weituo[$z1]['p'] = $l['askprice1']-$i*$minmove;
+							$wt['d'] = $weituo[$z1]['d'] = "s";
+							$weituo[$z1]['d1'] = "s-2";
+							$weituo[$z1]['t'] = $l['date'];
+							$z1++;
+						}
+					}
+					else if(!empty($chengjiao) == true && $chicang<=$maxloss-1 && substr($chengjiao[$z2-1]['d'],0,1) == "s" && isset($up["".($l['bidprice1']+$i*$minmove).""]) && checkweituo($weituo,$l['bidprice1']+$i*$minmove,"b",$minmove,$w) && $up["".($l['bidprice1']+$i*$minmove).""]['b']==0)
 					{
 						{
 							foreach($weituo as $k1 => $v1)
@@ -330,44 +372,8 @@ if((isset($argv) && $argv[6]==1) ||  $isdebug==1)
 							$i=($l['askprice1']-$l['bidprice1'])/$minmove+1;
 						}
 					}
-					else if(!empty($chengjiao) == true && $chicang<=$maxloss-1 && isset($up["".($l['bidprice1']+$i*$minmove).""]) && checkweituo($weituo,$l['bidprice1']+$i*$minmove,"b",$minmove,$w) && $up["".($l['bidprice1']+$i*$minmove).""]['b']==0 && $up["".($l['bidprice1']+$i*$minmove+$minmove*$w).""]['s']==1)
-					{
-						{				
-							foreach($weituo as $k1 => $v1)
-							{
-								if($v1['d'] != "0" && $v1['p']!=$l['bidprice1']+$i*$minmove && substr($v1['d'],0,1) == "b")
-								{
-									$weituo[$k1]['d'] = "0";
-									unset($weituo[$k1]);
-								}
-							}
-							debugout($z1."	".($l['bidprice1']+$i*$minmove)."	b ".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]:".$l['bidprice1']." B-2,".$z1."	\n",$isdebug);
-							$wt['p'] = $weituo[$z1]['p'] = $l['bidprice1']+$i*$minmove;
-							$wt['d'] = $weituo[$z1]['d'] = "b";
-							$weituo[$z1]['d1'] = "b-2";
-							$weituo[$z1]['t'] = $l['date'];
-							$z1++;
-						}
-					}
-					else if(!empty($chengjiao) == true && $chicang>=-$maxloss+1 && isset($up["".($l['askprice1']-$i*$minmove).""]) && checkweituo($weituo,$l['askprice1']-$i*$minmove,"s",$minmove,$w) && $up["".($l['askprice1']-$i*$minmove).""]['s']==0 && $up["".($l['askprice1']-$i*$minmove-$minmove*$w).""]['b']==1)
-					{
-						{
-							foreach($weituo as $k1 => $v1)
-							{
-								if($v1['d'] != "0" && $v1['p']!=$l['askprice1']-$i*$minmove && substr($v1['d'],0,1) == "s")
-								{
-									$weituo[$k1]['d'] = "0";
-									unset($weituo[$k1]);
-								}
-							}
-							debugout($z1."	".($l['askprice1']-$i*$minmove)."	s ".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]: S-2,".$z1."	\n",$isdebug);
-							$wt['p'] = $weituo[$z1]['p'] = $l['askprice1']-$i*$minmove;
-							$wt['d'] = $weituo[$z1]['d'] = "s";
-							$weituo[$z1]['d1'] = "s-2";
-							$weituo[$z1]['t'] = $l['date'];
-							$z1++;
-						}
-					}
+					
+					
 				}
 			}
 	}
@@ -550,7 +556,7 @@ $time_start = microtime_float();
 //var_dump($chengjiao);
 //var_dump($data2);
 
-$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(8);
 $objPHPExcel->getActiveSheet()->freezePane('B1');
 //var_dump($data3);
 $z=0;
@@ -676,20 +682,20 @@ foreach($chengjiao as $k=>$v)
 	$objPHPExcel->getActiveSheet()->setCellValue('F'.$n,$v['nt']);
 	if($v['d']=="b" )//|| $v['d']=="bk"
 	{
-		$profit = $profit + $blance-$v['p'];
-		$objPHPExcel->getActiveSheet()->setCellValue('G'.$n,$blance-$v['p']);
+		//$profit = $profit + $v['profit'];
+		$objPHPExcel->getActiveSheet()->setCellValue('G'.$n,$v['profit']);
 	}
 	else if($v['d']=="s")// || $v['d']=="sk"
 	{
-		$profit = $profit + $v['p']-$blance;
-		$objPHPExcel->getActiveSheet()->setCellValue('G'.$n,$v['p']-$blance);
+		//$profit = $profit + $v['profit'];
+		$objPHPExcel->getActiveSheet()->setCellValue('G'.$n,$v['profit']);
 	}
 	if($fee_type=="+")
 		$profit3 = $profit3-$fee;
 	else
 		$profit3 = $profit3-$v['p']*$fee*$unit;
 	$objPHPExcel->getActiveSheet()->setCellValue('H'.$n,$profit3);
-	$objPHPExcel->getActiveSheet()->setCellValue('I'.$n,$profit);
+	$objPHPExcel->getActiveSheet()->setCellValue('I'.$n,$v['profit']);
 	$n++;
 	$z++;
 }
