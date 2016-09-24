@@ -165,6 +165,15 @@ foreach($tick as $k=>$l)
 				$weituo[$k]['d'] = "0";
 				
 				$chicang++;
+				if($chicang==0)
+				{
+					$highestB = 0;
+					$highestS = 0;
+					$lowestS = 9999999;
+					$lowestB = 9999999;
+					$isH = 0;
+					$isL = 0;
+				}
 				
 				$chengjiao[$z2]['t'] = $l['date'];
 				$chengjiao[$z2]['t2'] = $v['t'];
@@ -213,6 +222,15 @@ foreach($tick as $k=>$l)
 					$level0 = ($highestB+$lowestS)/2;	
 				$weituo[$k]['d'] = "0";
 				$chicang--;
+				if($chicang==0)
+				{
+					$highestB = 0;
+					$highestS = 0;
+					$lowestS = 9999999;
+					$lowestB = 9999999;
+					$isH = 0;
+					$isL = 0;
+				}
 				$chengjiao[$z2]['t'] = $l['date'];
 				$chengjiao[$z2]['t2'] = $v['t'];
 				$chengjiao[$z2]['d'] = $v['d'];
