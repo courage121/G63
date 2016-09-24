@@ -167,12 +167,19 @@ foreach($tick as $k=>$l)
 				$chicang++;
 				if($chicang==0)
 				{
+					
 					$highestB = 0;
 					$highestS = 0;
 					$lowestS = 9999999;
 					$lowestB = 9999999;
 					$isH = 0;
 					$isL = 0;
+					/**/
+					for($i=0;$i<=$n;$i++)
+					{
+						$up["".($blance+$i*$minmove*$w).""]['b'] = 0;
+						$up["".($blance+$i*$minmove*$w).""]['s'] = 0;
+					}
 				}
 				
 				$chengjiao[$z2]['t'] = $l['date'];
@@ -222,14 +229,22 @@ foreach($tick as $k=>$l)
 					$level0 = ($highestB+$lowestS)/2;	
 				$weituo[$k]['d'] = "0";
 				$chicang--;
+				
 				if($chicang==0)
 				{
+					
 					$highestB = 0;
 					$highestS = 0;
 					$lowestS = 9999999;
 					$lowestB = 9999999;
 					$isH = 0;
 					$isL = 0;
+					/**/
+					for($i=0;$i<=$n;$i++)
+					{
+						$up["".($blance+$i*$minmove*$w).""]['b'] = 0;
+						$up["".($blance+$i*$minmove*$w).""]['s'] = 0;
+					}
 				}
 				$chengjiao[$z2]['t'] = $l['date'];
 				$chengjiao[$z2]['t2'] = $v['t'];
@@ -854,7 +869,7 @@ foreach($weituo as $k=>$v)
 }
 //$objPHPExcel->getActiveSheet()->setCellValue('H'.$n,"=SUM(H2:H".($n-1).")");
 //$objPHPExcel->getActiveSheet()->setCellValue('I'.$n,"=SUM(I2:I".($n-1).")");
-$objPHPExcel->setActiveSheetIndex(0);
+$objPHPExcel->setActiveSheetIndex(1);
 if(isset($argv) && $argv[6]==1)
 {
 	$time_end = microtime_float();
