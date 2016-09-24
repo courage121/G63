@@ -106,6 +106,7 @@ $weituo = array();
 $wt = array();
 $data5 = array();
 $chicang = 0;
+$level0 = 0;
 //委托索引z1
 //成交索引z2
 $z1 = 0;
@@ -158,6 +159,8 @@ foreach($tick as $k=>$l)
 				}
 				if($v['p']<$lowestB)
 					$lowestB = $v['p'];
+				if($highestB!=0 && $lowestS!=9999999)
+					$level0 = ($highestB+$lowestS)/2;
 				$weituo[$k]['d'] = "0";
 				
 				$chicang++;
@@ -203,7 +206,9 @@ foreach($tick as $k=>$l)
 					$isL = 1;
 				}
 				if($v['p']>$highestS)
-					$highestS = $v['p'];		
+					$highestS = $v['p'];	
+				if($highestB!=0 && $lowestS!=9999999)
+					$level0 = ($highestB+$lowestS)/2;	
 				$weituo[$k]['d'] = "0";
 				$chicang--;
 				$chengjiao[$z2]['t'] = $l['date'];
