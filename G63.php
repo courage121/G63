@@ -231,7 +231,7 @@ foreach($tick as $k=>$l)
 			}
 			else if($v['d'] != "0" && ($l['bidprice1']>=$v['p'] || $l['askprice1']>$v['p']) && substr($v['d'],0,1) == "s")
 			{	
-				if($v['p']<$lowestS 
+				if($v['p']<$lowestS && $v['p']<=$highestB
 				//|| $v['p']<$highestB*$para
 				)
 				{
@@ -377,8 +377,9 @@ if((isset($argv) && $argv[6]==1) ||  $isdebug==1)
 				&& $l['bidprice1'] > $checkS
 				)
 				*/
-			|| ($chicang==0 && isset($up["".($l['bidprice1']).""]) && checkStatus4($up,"s",$minmove*$w))
-			|| ($chicang==0 && $isH==1 && isset($up["".($l['bidprice1']).""]) && checkUnDeal($up,"b", $l['bidprice1']+$minmove*$w))
+			//|| ($chicang==0 && isset($up["".($l['bidprice1']).""]) && checkStatus4($up,"s",$minmove*$w))
+			|| ($chicang==0 && $isH==1 && isset($up["".($l['bidprice1']).""]))
+			//|| ($chicang==0 && $isL==1 && (substr($chengjiao[$z2-1]['d'],0,1) == "s" && $chengjiao[$z2-2]['p']<$highestB && $chengjiao[$z2-1]['p']==$highestB) && isset($up["".($l['bidprice1']).""]))
 			)
 			{
 				/**/
@@ -439,14 +440,14 @@ if((isset($argv) && $argv[6]==1) ||  $isdebug==1)
 									//|| ($up["".($l['bidprice1']+$i*$minmove+$minmove*$w).""]['s']=="1" && checkUnDeal($up,"s",($l['bidprice1']+$i*$minmove+$minmove*$w)))
 								);
 						$t7 = !($up["".($l['bidprice1']+$i*$minmove+$minmove*$w).""]['s']=="1" && checkStatus6($up,"s",$l['bidprice1']+$i*$minmove,$minmove*$w));
-						$t8 = (!checkStatus5($up,$l['bidprice1']+$i*$minmove,$minmove*$w));
+						$t8 = (checkStatus5($up,"b",$l['bidprice1']+$i*$minmove) || $l['bidprice1']+$i*$minmove>=$highestB);//(!checkStatus5($up,$l['bidprice1']+$i*$minmove,$minmove*$w));
 					}
 					else
 					{
 						$t3 = $t4 = $t5 = $t6 = $t7 = false;
 					}
 					
-					if($l['date'] == "2016-09-02 09:26:49" && $isdebug==1)
+					if($l['date'] == "2016-09-02 09:03:25" && $isdebug==1)
 					{
 						$t0?print "t0 1\n": print "t0 0\n";
 						$t1?print "t1 1\n": print "t1 0\n";
@@ -457,6 +458,10 @@ if((isset($argv) && $argv[6]==1) ||  $isdebug==1)
 						$t6?print "t6 1\n": print "t6 0\n";
 						$t7?print "t7 1\n": print "t7 0\n";
 						$t8?print "t8 1\n": print "t8 0\n";
+						print "[".$isH.",".$isL."]\n";
+						print "[".$highestB.",".$lowestS."]\n";
+						checkStatus5($up,"b",$l['bidprice1']+$i*$minmove,true);
+						exit;
 					}
 				
 					if($t0  
@@ -572,7 +577,12 @@ if(isset($argv) && $argv[6]==1)
 		$time = $time_end - $time_start;
 		print "计算耗时:".$time."\n";
 	}
-function checkUnDeal(array $ar,$d,$p)
+/*
+*检查大于P的S
+*
+*检查小于P的B
+*/
+function checkUnDeal(array $ar,$d,$p,$t=false)
 {
 	foreach($ar as $k1 => $v1)
 	{
@@ -659,33 +669,42 @@ function checkStatus4(array $ar,$d,$minG,$t=false)
 }
 /*
 *B
-*  B
-* S
 *
-*      (B)X
+*   B
+*       
+*		(B)X
+*
+* S
+*         
 *    S
 */
-function checkStatus5(array $ar,$p,$minG,$t=false)
+function checkStatus5(array $ar,$d,$p,$t=false)
 {
-	$t1 = false;
-	$t2 = 0;
-	$t3 = false;
-	$lB=9999999;
+	$upB=array();
+	$downB=array();
+	$upS=array();
+	$downS=array();
 	foreach($ar as $k1 => $v1)
 	{
-		if($k1<=$p && $v1['s'] == "1")
-			$t1 = true;
-		if($k1>=$p && $v1['b'] == "1")
-			$t2++;
-		if($k1>=$p && $v1['s'] == "1")
-			$t3 = true;
+		if($v1['b'] == "1" && $k1>=$p)
+			array_push($upB,$k1);
+		else if($v1['b'] == "1" && $k1<=$p)
+			array_push($downB,$k1);
+		if($v1['s'] == "1" && $k1>=$p)
+			array_push($upS,$k1);
+		else if($v1['s'] == "1" && $k1<=$p)
+			array_push($downS,$k1);
+		
 	}
+	//rsort($h);
+	//sort($l);
 	if($t==true)
 	{
-		print $hB.",".$lS.",".$hS.",".$lB."\n";
-		print ($hS-$lB)/($hB-$lS)."\n";
+		//print_r($ar);
+		print_r($upB);
+		print_r($downB);
 	}
-	if($t1 && $t3 && $t2>=2)
+	if($d=="b" && count($downS)<=1)
 		return true;
 	else
 		return false;
