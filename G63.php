@@ -214,11 +214,11 @@ foreach($tick as $k=>$l)
 				}
 				//if(!($chicang==2*$maxloss && $isL==1 && $up["".($v['p']).""]['b']==0))
 				//if(($v['p']+$w*$minmove>=$level0) || $up["".($v['p']).""]['b']==1)
-				if(!checkStatus1($up,"s",$v['p'],$minmove*$w)
-					&& !($isL==1 && $up["".($v['p']+$w*$minmove).""]['s']==0 && $up["".($v['p']).""]['b']==0)
-					&& !checkUnDeal($up,"s",$v['p']+$w*$minmove)
+				//if(!checkStatus1($up,"s",$v['p'],$minmove*$w)
+				//	&& !($isL==1 && $up["".($v['p']+$w*$minmove).""]['s']==0 && $up["".($v['p']).""]['b']==0)
+				//	&& !checkUnDeal($up,"s",$v['p']+$w*$minmove)
 				//))
-				)
+				//)
 				// || $chicang>=0
 				{
 					debugout($z1."	".($v['p']+$w*$minmove)."	s	".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]:".($v['p']+$w*$minmove)." A1,".$z1."	\n",$isdebug);
@@ -319,13 +319,13 @@ foreach($tick as $k=>$l)
 				//if(!($chicang==-$minmove*$w && $isH==1 && $up["".($v['p']-$w*$minmove]['s']==0 && $up["".($v['p']-$w*$minmove]['b']==0))
 				//if(!($chicang==-2*$maxloss && $isH==1))
 				//if(($v['p']-$w*$minmove<=$level0) || $up["".($v['p']).""]['s']==1)
-				if(!checkStatus1($up,"b",$v['p'],$minmove*$w)
-					&& !($isH==1 && $up["".($v['p']-$w*$minmove).""]['b']==0 && $up["".($v['p']).""]['s']==0)
-					&& !($up["".($v['p']).""]['s']=="1" && checkStatus6($up,"s",$v['p']-$w*$minmove,$minmove*$w))
-					&& (checkStatus5($up,"b",$v['p']-$w*$minmove) || $chicang==-$maxloss)
+				//if(!checkStatus1($up,"b",$v['p'],$minmove*$w)
+				//	&& !($isH==1 && $up["".($v['p']-$w*$minmove).""]['b']==0 && $up["".($v['p']).""]['s']==0)
+				//	&& !($up["".($v['p']).""]['s']=="1" && checkStatus6($up,"s",$v['p']-$w*$minmove,$minmove*$w))
+				//	&& (checkStatus5($up,"b",$v['p']-$w*$minmove) || $chicang==-$maxloss)
 				//&& checkUnDeal($up,"s",$v['p']-$w*$minmove)
 				//)) || $chicang<=0
-				)
+				//)
 				// 
 				{
 					debugout($z1."	".($v['p']-$w*$minmove)."	b	".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]:".($v['p']-$w*$minmove)." B1,".$z1."	\n",$isdebug);
