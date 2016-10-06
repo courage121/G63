@@ -1,5 +1,5 @@
 <?php
-
+//SELECT date,bidprice1,askprice1 FROM level2.j1701 j where date>="2016-09-02 08" and date<="2016-09-02 16";
 /** Error reporting */
 error_reporting(E_ALL);
 
