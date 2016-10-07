@@ -183,14 +183,15 @@ foreach($tick as $k=>$l)
 				
 				$z2++;
 				$up["".($v['p']).""][$v['d']] = $up["".($v['p']).""][$v['d']]+1;
-				if(isset($up["".($v['p']+$minmove*$w).""]["s"]) && $up["".($v['p']+$minmove*$w).""]["s"]>=1)
+				$tmp = checkinit($up,$v['p'],1,$minmove,$w);
+				if($tmp!=NULL)
 				{
-					$up["".($v['p']+$minmove*$w).""]["s"] = $up["".($v['p']+$minmove*$w).""]["s"]-1;	
 					$up["".($v['p']).""][$v['d']] = $up["".($v['p']).""][$v['d']]-1;
+					$up["".($tmp).""]['s'] = $up["".($tmp).""]['s']-1;
 				}
 				//checkinit(&$up,$v['p'],1,$minmove,$w);
 				debugout($z1."		".($v['p'])."deal1 ".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]:".($v['p'])."deal1,".$v['d']."\n",$isdebug);
-				unset($weituo[$k]);
+				/*unset($weituo[$k]);
 				
 				foreach($weituo as $k1 => $v1)
 				{
@@ -209,6 +210,7 @@ foreach($tick as $k=>$l)
 					$weituo[$z1]['t'] = $l['date'];	
 					$z1++;
 				}
+				*/
 			}
 			else if($v['d'] != "0" && ($l['bidprice1']>=$v['p'] || $l['askprice1']>$v['p']) && substr($v['d'],0,1) == "s")
 			{	
@@ -242,16 +244,24 @@ foreach($tick as $k=>$l)
 				$chengjiao[$z2]['profit'] = calprofit($chengjiao,$v['p']);
 				$z2++;
 				$up["".($v['p']).""][$v['d']] = $up["".($v['p']).""][$v['d']]+1;	
-				if(isset($up["".($v['p']-$minmove*$w).""]["b"]) && $up["".($v['p']-$minmove*$w).""]["b"]>=1)
+				$tmp = checkinit($up,$v['p'],-1,$minmove,$w);
+				if($tmp!=NULL)
 				{
-					$up["".($v['p']-$minmove*$w).""]["b"] = $up["".($v['p']-$minmove*$w).""]["b"]-1;	
 					$up["".($v['p']).""][$v['d']] = $up["".($v['p']).""][$v['d']]-1;
+					$up["".($tmp).""]['b'] = $up["".($tmp).""]['b']-1;
+				}
+				if((isset($argv) && $argv[6]==1) ||  $isdebug==1)
+				{
+					if($l['date'] == "2016-09-02 09:03:22")
+					{
+						//print "[".$l['bidprice1'].",".$l['askprice1']."]\n";
+						//print $v['p']."\n";
+						var_dump($tmp);
+					}
 				}
 
-				//checkinit(&$up,$v['p'],-1,$minmove,$w);
-
 				debugout($z1."		".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]:".($v['p'])."deal2,".$v['d']."\n",$isdebug);
-				unset($weituo[$k]);
+				/*unset($weituo[$k]);
 				
 				foreach($weituo as $k1 => $v1)
 				{
@@ -261,7 +271,7 @@ foreach($tick as $k=>$l)
 						unset($weituo[$k1]);
 					}
 				}
-
+				
 				{
 					debugout($z1."	".($v['p']-$w*$minmove)."	b	".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]:".($v['p']-$w*$minmove)." B1,".$z1."	\n",$isdebug);
 					$wt['p'] = $weituo[$z1]['p'] = $v['p']-$w*$minmove;
@@ -270,6 +280,7 @@ foreach($tick as $k=>$l)
 					$weituo[$z1]['t'] = $l['date'];
 					$z1++;
 				}
+				*/
 			}				
 		}
 		//print "¼ì²éÎ¯ÍÐ½áÊø\n";
@@ -451,7 +462,7 @@ foreach($tick as $k=>$l)
 					{
 						$t501 = $t502 = $t503 = $t504 = $t505 = $t506 = $t507 = $t508 = false;
 					}
-					if($l['date'] == "2016-09-02 09:00:28" && $isdebug==1)
+					if($l['date'] == "2016-09-02 09:55:28" && $isdebug==1)
 					{
 						$t400?print "t0 1\n": print "t0 0\n";
 						$t401?print "t1 1\n": print "t1 0\n";
@@ -892,49 +903,32 @@ function checkStatus7(array $ar,$d,$p,$minG,$t=false)
 }
 function checkinit(array $up,$p,$d,$minmove,$w,$t=0)
 {	
-	if($d==1 && $up["".$p.""]['b']==1 
-		&& $up["".($p+$minmove*$w).""]['s']==1
-		)
+	$tmp = NULL;
+	$maxB = 0;
+	$minS = 9999999;
+	if($d==1)
 	{
-		$up["".$p.""]['b'] = 0;
-		$up["".($p+$minmove*$w).""]['s'] = 0;
-	}
-	else if($d==-1 && $up["".$p.""]['s']==1 && $up["".($p-$minmove*$w).""]['b']==1)
-	{
-		if($t=="2016-07-01 22:29:32")
+		foreach($up as $k=>$v)
 		{
-		print $p."\n";
-		print ($p-$minmove*$w)."\n";
+			if($k<$minS && $k>$p && $v['s']>=1)
+			{
+				$tmp = $k;
+				$minS = $k;
+			}
 		}
-		$up["".$p.""]['s'] = 0;
-		$up["".($p-$minmove*$w).""]['b'] = 0;
 	}
-	/*
 	else if($d==-1)
 	{
 		foreach($up as $k=>$v)
 		{
-			if($k<$p && $up["".$k.""]['b']==1)
+			if($k>$maxB && $k<$p && $v['b']>=1)
 			{
-				$up["".$p.""]['s'] = 0;
-				$up["".$k.""]['b'] = 0;
+				$tmp = $k;
+				$maxB = $k;
 			}
-				
 		}
 	}
-	else if($d==1)
-	{
-		foreach($up as $k=>$v)
-		{
-			if($k>$p && $up["".$k.""]['s']==1)
-			{
-				$up["".$p.""]['b'] = 0;
-				$up["".$k.""]['s'] = 0;
-			}
-				
-		}
-	}
-	*/
+	return $tmp;	
 }
 function debugout($str,$b)
 {
