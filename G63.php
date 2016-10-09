@@ -95,6 +95,8 @@ $highestB = 0;
 $highestS = 0;
 $lowestS = 9999999;
 $lowestB = 9999999;
+$planA = 0;
+$planB = 0;
 $isH = 0;
 $isL = 0;
 $init = true;
@@ -166,7 +168,10 @@ foreach($tick as $k=>$l)
 					$stack = array_diff_key($stack,array("".($v['p']+$minmove*$w)."s"=>1,"".$v['p']."b"=>1));
 					
 				if($init == true)
+				{
 					$init = false;
+					$planB = 1;
+				}
 				if($v['p']>$highestB 
 				//|| $v['p']>$lowestS*(1+1-$para)
 				)
@@ -207,8 +212,8 @@ foreach($tick as $k=>$l)
 						$up["".($blance+$i*$minmove*$w).""]['s'] = 0;
 					}
 					$up["".($v['p']).""][$v['d']] = $up["".($v['p']).""][$v['d']]+1;*/
-					$stack = NULL;
-					$chengjiao[$z2-1]['d1'] = "a-0";
+					//$stack = NULL;
+					//$chengjiao[$z2-1]['d1'] = "a-0";
 					
 					
 					//$init = true;
@@ -254,7 +259,10 @@ foreach($tick as $k=>$l)
 					$stack = array_diff_key($stack,array("".($v['p']-$minmove*$w)."b"=>1,"".$v['p']."s"=>1));
 
 				if($init == true)
+				{
 					$init = false;
+					$planA = 1;
+				}
 				if($v['p']<$lowestS && $v['p']<=$highestB
 				//|| $v['p']<$highestB*$para
 				)
@@ -296,7 +304,7 @@ foreach($tick as $k=>$l)
 						$up["".($blance+$i*$minmove*$w).""]['s'] = 0;
 					}
 					$up["".($v['p']).""][$v['d']] = $up["".($v['p']).""][$v['d']]+1;*/
-					$chengjiao[$z2-1]['d1'] = "a-0";
+					//$chengjiao[$z2-1]['d1'] = "a-0";
 					
 					
 					//$init = true;
@@ -502,7 +510,7 @@ foreach($tick as $k=>$l)
 						$t402 = substr($chengjiao[$z2-1]['d'],0,1) == "b";
 						$t403 = $l['bidprice1']+$i*$minmove!=$chengjiao[$z2-1]['p'];
 						$t404 = $up["".($l['bidprice1']+$i*$minmove+$minmove*$w).""]['s']==0;
-						$t405 = true;
+						$t405 = $planA==1;
 						$t406 = true;
 						$t407 = true;
 						$t408 = true;
@@ -520,7 +528,7 @@ foreach($tick as $k=>$l)
 						$t502 = substr($chengjiao[$z2-1]['d'],0,1) == "s";
 						$t503 = $l['askprice1']-$i*$minmove!=$chengjiao[$z2-1]['p'];
 						$t504 = $up["".($l['askprice1']-$i*$minmove-$minmove*$w).""]['b']==0;
-						$t505 = true;
+						$t505 = $planB==1;
 						$t506 = true;
 						$t507 = true;
 						$t508 = true;
