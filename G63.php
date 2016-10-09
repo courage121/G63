@@ -234,9 +234,7 @@ foreach($tick as $k=>$l)
 			{	
 				if($init == true)
 					$init = false;
-				if($v['p']<$lowestS && $v['p']<=$highestB
-				//|| $v['p']<$highestB*$para
-				)
+				if($v['p']<$lowestS)
 				{
 					$lowestS = $v['p'];						
 					$isH = 0;
@@ -376,13 +374,13 @@ foreach($tick as $k=>$l)
 			else if($z2!=0)
 			{
 				for($i=0;$i<($l['askprice1']-$l['bidprice1'])/$minmove;$i++)
-				{	
+				{	//B-1
 					(!empty($chengjiao) && $chicang<=$maxloss-1 && isset($up["".($l['bidprice1']+$i*$minmove).""]))?$t0 = true:$t0 = false;
 					if($t0 == true)
 					{
 						$t1 = $up["".($l['bidprice1']+$i*$minmove).""]['b']==0;
 						$t2 = substr($chengjiao[$z2-1]['d'],0,1) == "s";
-						$t3 = true;
+						$t3 = $l['bidprice1']+$i*$minmove!=$chengjiao[$z2-1]['p'] || $chicang==0;
 						$t4 = true;
 						$t5 = true;
 						$t6 = true;
@@ -393,13 +391,13 @@ foreach($tick as $k=>$l)
 					{
 						$t1 = $t2 = $t3 = $t4 = $t5 = $t6 = $t7 = $t8 = false;
 					}
-					
+					//S-1
 					(!empty($chengjiao) && $chicang>=-$maxloss+1 && isset($up["".($l['askprice1']-$i*$minmove).""]))?$t100 = true:$t100 = false;
 					if($t100 == true)
 					{
 						$t101 = $up["".($l['askprice1']-$i*$minmove).""]['s']==0 ;
 						$t102 = substr($chengjiao[$z2-1]['d'],0,1) == "b" ;
-						$t103 = true;
+						$t103 = $l['askprice1']-$i*$minmove!=$chengjiao[$z2-1]['p'] || $chicang==0;
 						$t104 = true;
 						$t105 = true;
 						$t106 = true;
@@ -410,7 +408,41 @@ foreach($tick as $k=>$l)
 					{
 						$t101 = $t102 = $t103 = $t104 = $t105 = $t106 = $t107 = $t108 = false;
 					}
-					if($l['date'] == "2016-09-02 09:00:33" && $isdebug==1)
+					//B-2
+					(!empty($chengjiao) && $chicang==0 && isset($up["".($l['bidprice1']+$i*$minmove).""]))?$t200 = true:$t200 = false;
+					if($t200 == true)
+					{
+						$t201 = $up["".($l['bidprice1']+$i*$minmove).""]['b']==0;
+						$t202 = $up["".($l['bidprice1']+$i*$minmove+$minmove*$w).""]['s']==1;
+						$t203 = $l['bidprice1']+$i*$minmove<$lowestS;
+						$t204 = true;
+						$t205 = true;
+						$t206 = true;
+						$t207 = true;
+						$t208 = true;
+					}
+					else
+					{
+						$t201 = $t202 = $t203 = $t204 = $t205 = $t206 = $t207 = $t208 = false;
+					}
+					//S-2
+					(!empty($chengjiao) && $chicang==0 && isset($up["".($l['askprice1']-$i*$minmove).""]))?$t300 = true:$t300 = false;
+					if($t300 == true)
+					{
+						$t301 = $up["".($l['askprice1']-$i*$minmove).""]['s']==0;
+						$t302 = $up["".($l['askprice1']-$i*$minmove-$minmove*$w).""]['b']==1;
+						$t303 = $l['askprice1']-$i*$minmove>$highestB;
+						$t304 = true;
+						$t305 = true;
+						$t306 = true;
+						$t307 = true;
+						$t308 = true;
+					}
+					else
+					{
+						$t301 = $t302 = $t303 = $t304 = $t305 = $t306 = $t307 = $t308 = false;
+					}
+					if($l['date'] == "2016-09-02 09:00:44" && $isdebug==1)
 					{
 						$t0?print "t0 1\n": print "t0 0\n";
 						$t1?print "t1 1\n": print "t1 0\n";
@@ -423,8 +455,8 @@ foreach($tick as $k=>$l)
 						$t8?print "t8 1\n": print "t8 0\n";
 						print $i."[".$isH.",".$isL."]\n";
 						print "[".$l['bidprice1'].",".$l['askprice1']."]\n";
-						var_dump($up);
-						//print "[".$highestB.",".$lowestS."]\n";
+						//var_dump($up);
+						print "[".$highestB.",".$lowestS."]\n";
 						//checkStatus5($up,"b",$l['bidprice1']+$i*$minmove,true);
 						exit;
 					}
@@ -486,6 +518,68 @@ foreach($tick as $k=>$l)
 							$wt['p'] = $weituo[$z1]['p'] = $l['askprice1']-$i*$minmove;
 							$wt['d'] = $weituo[$z1]['d'] = "s";
 							$weituo[$z1]['d1'] = "s-1";
+							$weituo[$z1]['t'] = $l['date'];
+							$z1++;
+							$i=($l['askprice1']-$l['bidprice1'])/$minmove+1;
+						}
+					}
+					else if($t200  
+					&& $t201
+					&& $t202
+					&& $t203
+					&& $t204
+					&& $t205
+					&& $t206
+					&& $t207
+					&& $t208
+					//&& 
+					//&& (checkStatus2($up,"b",$l['bidprice1']+$i*$minmove,$minmove*$w))
+					//|| ($l['bidprice1']+$i*$minmove<=$level0)
+					//&& ($level0==0 || ($l['bidprice1']+$i*$minmove<=$level0) || ($l['bidprice1']+$i*$minmove>$highestB))
+					)
+					{
+						{
+							foreach($weituo as $k1 => $v1)
+							{
+								//if($v1['d'] != "0" && $v1['p']!=$l['bidprice1']+$i*$minmove && substr($v1['d'],0,1) == "b")
+								{
+									$weituo[$k1]['d'] = "0";
+									unset($weituo[$k1]);
+								}
+							}
+							debugout($z1."	".($l['bidprice1']+$i*$minmove)."	b ".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]:".$l['bidprice1']." B-2,".$z1."	\n",$isdebug);
+							$wt['p'] = $weituo[$z1]['p'] = $l['bidprice1']+$i*$minmove;
+							$wt['d'] = $weituo[$z1]['d'] = "b";
+							$weituo[$z1]['d1'] = "b-2";
+							$weituo[$z1]['t'] = $l['date'];
+							$z1++;
+							$i=($l['askprice1']-$l['bidprice1'])/$minmove+1;
+						}
+					}
+					else if($t300  
+					&& $t301
+					&& $t302
+					&& $t303
+					&& $t304
+					&& $t305
+					&& $t306
+					&& $t307
+					&& $t308
+					)
+					{
+						{
+							foreach($weituo as $k1 => $v1)
+							{
+								//if($v1['d'] != "0" && $v1['p']!=$l['askprice1']-$i*$minmove && substr($v1['d'],0,1) == "s")
+								{
+									$weituo[$k1]['d'] = "0";
+									unset($weituo[$k1]);
+								}
+							}
+							debugout($z1."	".($l['askprice1']-$i*$minmove)."	s ".$chicang."|".$l['date']."[".$l['bidprice1'].",".$l['askprice1']."]: S-2,".$z1."	\n",$isdebug);
+							$wt['p'] = $weituo[$z1]['p'] = $l['askprice1']-$i*$minmove;
+							$wt['d'] = $weituo[$z1]['d'] = "s";
+							$weituo[$z1]['d1'] = "s-2";
 							$weituo[$z1]['t'] = $l['date'];
 							$z1++;
 							$i=($l['askprice1']-$l['bidprice1'])/$minmove+1;
