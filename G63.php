@@ -477,7 +477,7 @@ foreach($tick as $k=>$l)
 					{
 						$t501 = $up["".($l['askprice1']-$i*$minmove).""]['s']==0 ;
 						$t502 = $up["".($l['askprice1']-$i*$minmove-$minmove*$w).""]['b']=="1";
-						$t503 = true;
+						$t503 = substr($chengjiao[$z2-1]['d'],0,1) == "s" || $l['askprice1']-$i*$minmove>max($st["b"]);
 						$t504 = true;
 						$t505 = true;
 						$t506 = true;
