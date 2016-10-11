@@ -505,7 +505,7 @@ foreach($tick as $k=>$l)
 					{
 						$t601 = $t602 = $t603 = $t604 = $t605 = $t606 = $t607 = $t608 = false;
 					}
-					if($l['date'] == "2016-09-02 09:04:08" && $isdebug==1)
+					if($l['date'] == "2016-09-02 09:06:24" && $isdebug==1)
 					{
 						$t400?print "t0 1\n": print "t0 0\n";
 						$t401?print "t1 1\n": print "t1 0\n";
