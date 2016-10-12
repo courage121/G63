@@ -476,7 +476,7 @@ foreach($tick as $k=>$l)
 					if($t500 == true)
 					{
 						$t501 = $up["".($l['askprice1']-$i*$minmove).""]['s']==0 ;
-						$t502 = ($l['askprice1']-$i*$minmove>$st['b']['min'] && substr($chengjiao[$z2-1]['d'],0,1) == "b") || ($l['askprice1']-$i*$minmove>$st['s']['max'] && substr($chengjiao[$z2-1]['d'],0,1) == "s");
+						$t502 = ($l['askprice1']-$i*$minmove>$st['b']['min'] && substr($chengjiao[$z2-1]['d'],0,1) == "b") || ($l['askprice1']-$i*$minmove>$st['b']['min'] && substr($chengjiao[$z2-1]['d'],0,1) == "s");
 						$t503 = true;
 						$t504 = true;
 						$t505 = true;
