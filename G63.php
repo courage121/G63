@@ -67,7 +67,7 @@ $fee_type = $fees[substr($_REQUEST['contracts'],0,-4)]['t'];
 $w = $_REQUEST['w'];
 //$unit = $_REQUEST['u'];
 //$fee = $
-if(!is_numeric(substr($_REQUEST['contracts'],0,-4)))
+if(!is_numeric(substr($_REQUEST['contracts'],-4)))
 	$contracts = substr($_REQUEST['contracts'],0,strlen($_REQUEST['contracts'])-3);
 else
 	$contracts = substr($_REQUEST['contracts'],0,strlen($_REQUEST['contracts'])-4);
