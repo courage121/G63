@@ -1,0 +1,41 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>Untitled Document</title>
+<script type="text/javascript" src="../jquery.js">
+</script>
+
+
+<script type="text/javascript"  language="javascript">
+	
+					
+		$(function()
+			{
+			
+			
+				$("a#search").click(function()
+					{
+						var contracts;
+						
+						$.get("showgird.php",{contract: $(contract).val(),mw:$(mw).val()}, function(content)
+						{
+				  $("#content").empty();
+							$("#content").replaceWith(content);			
+						})
+					}
+				)
+										
+			}
+		)
+</script>
+</head>
+<body>
+合约:
+<input id="contract" name="contract" type="text" name="datetext" size="6" class="" />
+最小变动单位:
+<input id="mw" name="mw" type="text" name="datetext" size="6" class="" />
+<a id="search"> 
+	<img style="cursor: hand;" alt="查询"  align="absmiddle" /></a>
+<div id="content" ></div>
+</body>
+</html>
